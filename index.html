@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Document Viewer</h1>
+    <div id="document-content"></div>
+
+    <!-- Link to the docs.js file -->
+    <script src="docs.js"></script>
+    <script>
+        // Function to get URL parameters
+        function getParameterByName(name, url = window.location.href) {
+            name = name.replace(/[\[\]]/g, '\\$&');
+            let regex = new RegExp('[?&]' + name + '(=([^&#]*)|&|#|$)'),
+                results = regex.exec(url);
+            if (!results) return null;
+            if (!results[2]) return '';
+            return decodeURIComponent(results[2].replace(/\+/g, ' '));
+        }
+
+        // Function to load the document content
+        function loadDocument(docId) {
+            const documentLink = documents[docId];
+            if (documentLink) {
+                const iframe = document.createElement('iframe');
+                iframe.src = documentLink.replace('/view?usp=sharing', '/preview');
+                iframe.width = '100%';
+                iframe.height = '600px';
+                document.getElementById('document-content').appendChild(iframe);
+            } else {
+                document.getElementById('document-content').innerText = 'Document not found';
+            }
+        }
+
+        // Get docId from URL
+        const docId = getParameterByName('docId');
+
+        // Load and display the document
+        loadDocument(docId);
+    </script>
+</body>
+</html>
